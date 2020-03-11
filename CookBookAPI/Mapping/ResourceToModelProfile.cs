@@ -13,9 +13,10 @@ namespace CookBookAPI.Mapping
     {
         public ResourceToModelProfile()
         {
-            CreateMap<SaveRecipeResource, Recipe>();
-            CreateMap<IngredientResource, Ingredients>().ForMember(src=> src.Measure, opt => opt.MapFrom(src => src.Measure.ToDescriptionString()));
+            CreateMap<RecipeResource, Recipe>();
+            CreateMap<IngredientResource, Ingredients>();
             
         }
     }
 }
+    

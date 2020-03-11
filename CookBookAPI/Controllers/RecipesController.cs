@@ -43,7 +43,7 @@ namespace CookBookAPI.Controllers
             {
                 return NotFound();
             }
-            var recipeResource = _mapper.Map<Recipe, SaveRecipeResource>(result.Resource);
+            var recipeResource = _mapper.Map<Recipe, RecipeResource>(result.Resource);
             return Ok(recipeResource);
         }
 
@@ -51,14 +51,14 @@ namespace CookBookAPI.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, [FromBody] SaveRecipeResource recipe)
+        public async Task<IActionResult> PutAsync(int id, [FromBody] RecipeResource recipe)
         {
-            var _recipe = _mapper.Map<SaveRecipeResource, Recipe>(recipe);
+            var _recipe = _mapper.Map<RecipeResource, Recipe>(recipe);
             var result = await _recipeService.UpdateAsync(id, _recipe);
             if (!result.Success)
                 return BadRequest(result.Message);
 
-            var categoryResource = _mapper.Map<Recipe, SaveRecipeResource>(result.Resource);
+            var categoryResource = _mapper.Map<Recipe, RecipeResource>(result.Resource);
             return Ok(categoryResource);
         }
 
@@ -66,17 +66,17 @@ namespace CookBookAPI.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SaveRecipeResource recipe)
+        public async Task<IActionResult> PostAsync([FromBody] RecipeResource recipe)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
-            var _recipe = _mapper.Map<SaveRecipeResource, Recipe>(recipe);
+            var _recipe = _mapper.Map<RecipeResource, Recipe>(recipe);
             var result = await _recipeService.SaveAsync(_recipe);
 
             if (!result.Success)
                 return BadRequest(result.Message);
 
-            var recipeResource = _mapper.Map<Recipe, SaveRecipeResource>(result.Resource);
+            var recipeResource = _mapper.Map<Recipe, RecipeResource>(result.Resource);
             return Ok(recipeResource);
         }
 

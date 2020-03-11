@@ -12,7 +12,8 @@ namespace CookBookAPI.Domain.Repositores
         Task AddAsync(Recipe recipe);
         Task<Recipe> GetRecipeAsync(int id);
 
-        void Update(Recipe recipe);
+        void Update(int id, Recipe recipe);
         void Delete(Recipe recipe);
+        bool IsExists(string name);
     }
 }

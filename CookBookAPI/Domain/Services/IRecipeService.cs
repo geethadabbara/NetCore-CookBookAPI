@@ -9,9 +9,9 @@ namespace CookBookAPI.Domain.Services
    public interface IRecipeService
     {
         Task<IEnumerable<Recipe>> ListAsync();
-        Task<SaveRecipeResponse> GetRecipeAsync(int id);
-        Task<SaveRecipeResponse> SaveAsync(Recipe recipe);
-        Task<SaveRecipeResponse> UpdateAsync(int id, Recipe recipe);
-        Task<SaveRecipeResponse> Delete(Recipe recipe);
+        Task<RecipeResponse> GetRecipeAsync(int id);
+        Task<RecipeResponse> SaveAsync(Recipe recipe);
+        Task<RecipeResponse> UpdateAsync(int id, Recipe recipe);
+        Task<RecipeResponse> Delete(Recipe recipe);
     }
 }

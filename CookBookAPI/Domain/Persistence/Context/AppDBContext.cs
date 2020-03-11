@@ -26,7 +26,7 @@ namespace CookBookAPI.Domain.Persistence.Context
             builder.Entity<Recipe>().Property(p => p.Name).IsRequired().HasMaxLength(30);
             //builder.Entity<Recipe>().HasMany(p => p.Ingredients).WithOne(p => p.Recipe).HasForeignKey(p => p.RecipeId);
 
-            builder.Entity<Ingredients>().ToTable("Products");
+            builder.Entity<Ingredients>().ToTable("Ingredients");
             builder.Entity<Ingredients>().HasKey(p => p.Id);
             builder.Entity<Ingredients>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
             builder.Entity<Ingredients>().Property(p => p.Name).IsRequired().HasMaxLength(50);

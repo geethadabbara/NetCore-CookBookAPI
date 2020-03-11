@@ -16,24 +16,28 @@ namespace CookBookAPI.Domain.Services
             _recipeRepository = recipeRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<SaveRecipeResponse> SaveAsync(Recipe recipe)
+        public async Task<RecipeResponse> SaveAsync(Recipe recipe)
         {
             try
             {
+                if (this.IsExists(recipe))
+                {
+                    return new RecipeResponse($"Recipe already exists: ", false);
+                }
                 await _recipeRepository.AddAsync(recipe);
                 await _unitOfWork.CompleteAsync();
-                return new SaveRecipeResponse(recipe);
+                return new RecipeResponse(recipe);
             }
             catch (Exception ex)
             {
-                return new SaveRecipeResponse($"An error occurred when saving the recipe: {ex.Message}",false);
+                return new RecipeResponse($"An error occurred when saving the recipe: {ex.Message}",false);
             }
         }
 
-        public async Task<SaveRecipeResponse> GetRecipeAsync(int id)
+        public async Task<RecipeResponse> GetRecipeAsync(int id)
         {
             var recipe = await _recipeRepository.GetRecipeAsync(id);
-            return new SaveRecipeResponse(recipe);
+            return new RecipeResponse(recipe);
         }
 
         public async Task<IEnumerable<Recipe>> ListAsync()
@@ -41,45 +45,48 @@ namespace CookBookAPI.Domain.Services
             return await _recipeRepository.ListAsync().ConfigureAwait(false);
         }
 
-        public async Task<SaveRecipeResponse> UpdateAsync(int id, Recipe recipe)
+        public async Task<RecipeResponse> UpdateAsync(int id, Recipe recipe)
         {
             try
             {
-                Recipe persistedRecipe = await _recipeRepository.GetRecipeAsync(id).ConfigureAwait(false);
-                if (persistedRecipe != null && recipe != null)
+                if (recipe != null)
                 {
-                    persistedRecipe.Name = recipe.Name;
-                    persistedRecipe.Description = recipe.Description;
-                    persistedRecipe.MealType = recipe.MealType;
+                    //persistedRecipe.Name = recipe.Name;
+                    //persistedRecipe.Description = recipe.Description;
+                    //persistedRecipe.MealType = recipe.MealType;
 
-                    _recipeRepository.Update(persistedRecipe);
+                    _recipeRepository.Update(id, recipe);
                     await _unitOfWork.CompleteAsync();
-                    return new SaveRecipeResponse(recipe);
+                    return new RecipeResponse(recipe);
                 }
                 else
-                    return new SaveRecipeResponse("Recipe not found",false);
+                    return new RecipeResponse("Recipe not found",false);
 
             }
             catch (Exception ex)
             {
-                return new SaveRecipeResponse($"An error occurred when updating the recipe: {ex.Message}",false);
+                return new RecipeResponse($"An error occurred when updating the recipe: {ex.Message}",false);
             }
         }
 
-        public async Task<SaveRecipeResponse> Delete(Recipe recipe)
+        public async Task<RecipeResponse> Delete(Recipe recipe)
         {
             try
             {
                 if (recipe == null)
-                    return new SaveRecipeResponse("Recipe not found",false);
+                    return new RecipeResponse("Recipe not found",false);
                 _recipeRepository.Delete(recipe);
                 await _unitOfWork.CompleteAsync();
-                return new SaveRecipeResponse("Recipe deleted successfully", true);
+                return new RecipeResponse("Recipe deleted successfully", true);
             }
             catch (Exception ex)
             {
-                return new SaveRecipeResponse($"An error occurred when deleting the recipe: {ex.Message}", false);
+                return new RecipeResponse($"An error occurred when deleting the recipe: {ex.Message}", false);
             }
+        }
+        bool IsExists(Recipe recipe)
+        {
+            return _recipeRepository.IsExists(recipe.Name);
         }
     }
 }

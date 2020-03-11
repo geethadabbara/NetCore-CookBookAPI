@@ -22,7 +22,7 @@ namespace CookBookAPI.Domain.Repositores
 
         public async Task<Recipe> GetRecipeAsync(int id)
         {
-            return await _context.Recipes.FindAsync(id);
+            return await _context.Recipes.Include(n => n.Ingredients).FirstOrDefaultAsync(n => n.Id == id).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<Recipe>> ListAsync()
@@ -30,14 +30,49 @@ namespace CookBookAPI.Domain.Repositores
             return await _context.Recipes.ToListAsync().ConfigureAwait(false);
         }
 
-        public void Update(Recipe recipe)
+        public void Update(int id, Recipe recipe)
         {
-             _context.Recipes.Update(recipe);
+            Recipe persistedRecipe = GetRecipeAsync(id).Result;
+            if (persistedRecipe != null && recipe != null)
+            {
+                //update Parent
+                //_context.Entry(persistedRecipe).CurrentValues.SetValues(recipe);
+                persistedRecipe.Name = recipe.Name;
+                persistedRecipe.Description = recipe.Description;
+                persistedRecipe.MealType = recipe.MealType;
+
+                //Delete children
+                foreach (var item in persistedRecipe.Ingredients.ToList())
+                {
+                    if (!recipe.Ingredients.Any(e => e.Id == item.Id))
+                        _context.Ingredients.Remove(item);
+                }
+                // update and Insert
+                foreach (var item in recipe.Ingredients.ToList())
+                {
+                    var persistedIngredient = _context.Ingredients.Find(item.Id);
+                    if (persistedIngredient != null)
+                    {
+                        _context.Entry(persistedIngredient).CurrentValues.SetValues(item);
+                    }
+                    else
+                    {
+                        persistedRecipe.Ingredients.Add(item);
+                    }
+                }
+            }
+           // _context.Recipes.Update(recipe);
         }
 
-       public void Delete(Recipe recipe)
+        public void Delete(Recipe recipe)
         {
+            //_context.Ingredients.RemoveRange(recipe.Ingredients);
             _context.Recipes.Remove(recipe);
+
+        }
+        public bool IsExists(string name)
+        {
+            return _context.Recipes.Any(n => n.Name == name);
         }
     }
 }
