@@ -8,11 +8,11 @@ namespace CookBookAPI.Domain.Repositores
 {
     public abstract class BaseRepository
     {
-        protected readonly AppDBContext _context;
+        protected readonly AppDBContext context;
 
-        public BaseRepository(AppDBContext context)
+        public BaseRepository(AppDBContext _context)
         {
-            _context = context;
+            context = _context;
         }
     }
 }

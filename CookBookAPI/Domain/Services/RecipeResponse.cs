@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CookBookAPI.Domain.Services
 {
-    public class SaveRecipeResponse : BaseResponse<Recipe>
+    public class RecipeResponse : BaseResponse<Recipe>
     {
-        public SaveRecipeResponse(Recipe recipe) : base(recipe)
+        public RecipeResponse(Recipe recipe) : base(recipe)
         { }
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace CookBookAPI.Domain.Services
         /// </summary>
         /// <param name="message">Error message.</param>
         /// <returns>Response.</returns>
-        public SaveRecipeResponse(string message, bool success) : base(message, success: success)
+        public RecipeResponse(string message, bool success) : base(message, success: success)
         { }
     }
 }

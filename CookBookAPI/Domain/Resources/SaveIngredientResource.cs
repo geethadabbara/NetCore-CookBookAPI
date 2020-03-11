@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 
 namespace CookBookAPI.Domain.Resources
 {
-    public class IngredientResource
+    public class SaveIngredientResource
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
         public string Measure { get; set; }
-        public int RecipeId { get; set; }
         public RecipeResource RecipeResource { get; set; }
     }
 }

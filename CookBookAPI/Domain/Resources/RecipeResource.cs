@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CookBookAPI.Domain.Resources
 {
-    public class SaveRecipeResource
+    public class RecipeResource
     {
         [Required]
         [MaxLength(30)]
